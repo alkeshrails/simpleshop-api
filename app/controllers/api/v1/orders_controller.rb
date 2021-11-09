@@ -15,8 +15,13 @@ class Api::V1::OrdersController < ApplicationController
 
   # POST /orders
   def create
-    @order = Order.new(order_params)
+    @order = @current_user.orders.create
 
+    @order.create_order_items(order_params[:items])
+    @order.shipping_address = order_params[:shipping_address]
+    @order.order_total = @order.fetch_total_price
+    @order.customer_name = @current_user.name
+    @order.status = 'unpaid'
     if @order.save
       render json: @order, status: :created
     else
@@ -36,6 +41,7 @@ class Api::V1::OrdersController < ApplicationController
   # DELETE /orders/1
   def destroy
     @order.destroy
+    render json: 'Deleted Successfully', status: :ok
   end
 
   private
@@ -46,6 +52,6 @@ class Api::V1::OrdersController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def order_params
-    params.require(:order).permit(:customer_name, :shipping_address, :order_total, :paid_at)
+    params.require(:order).permit(:shipping_address, :items)
   end
 end

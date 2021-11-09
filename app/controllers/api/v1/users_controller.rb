@@ -22,7 +22,9 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def update
-    unless @user.update(user_params)
+    if @user.update(user_params)
+      render json: @user
+    else
       render json: { errors: @user.errors.full_messages },
              status: :unprocessable_entity
     end
@@ -30,6 +32,7 @@ class Api::V1::UsersController < ApplicationController
 
   def destroy
     @user.destroy
+    render json: 'Deleted Successfully', status: :ok
   end
 
   private

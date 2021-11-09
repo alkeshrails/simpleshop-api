@@ -24,7 +24,9 @@ class Api::V1::ProductsController < ApplicationController
   end
 
   def update
-    unless @product.update(product_params)
+    if @product.update(product_params)
+      render json: @product, status: :ok
+    else
       render json: { errors: @product.errors.full_messages },
              status: :unprocessable_entity
     end
@@ -32,6 +34,7 @@ class Api::V1::ProductsController < ApplicationController
 
   def destroy
     @product.destroy
+    render json: 'Deleted Successfully', status: :ok
   end
 
   private

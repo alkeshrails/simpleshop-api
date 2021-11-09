@@ -21,6 +21,6 @@ class ApplicationController < ActionController::API
   def check_admin_access
     return if @current_user.admin?
 
-    render json: { errors: "Only admin can manage regions"}, status: :unauthorized
+    render json: { errors: "Only admin user can manage products and regions"}, status: :unauthorized
   end
 end

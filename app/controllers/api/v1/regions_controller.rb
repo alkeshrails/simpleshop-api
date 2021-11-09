@@ -38,6 +38,7 @@ class Api::V1::RegionsController < ApplicationController
   # DELETE /regions/1
   def destroy
     @region.destroy
+    render json: 'Deleted Successfully', status: :ok
   end
 
   private
