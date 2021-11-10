@@ -3,6 +3,6 @@ class ProductSerializer < ActiveModel::Serializer
   belongs_to :region
 
   def image_url
-    object.get_image_url
+    object.get_image_url if object.image.attached?
   end
 end

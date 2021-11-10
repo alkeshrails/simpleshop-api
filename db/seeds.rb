@@ -3,7 +3,7 @@
 #
 # Examples:
 #
-User.create([{ name: 'Admin', email: 'admin@simpleshop.com', password: 'admin123' }, { name: 'Customer', email: 'customer@simpleshop.com', password: 'customer123' }])
+User.create([{ name: 'Admin', email: 'admin@simpleshop.com', password: 'admin123', role: 'admin' }, { name: 'Customer', email: 'customer@simpleshop.com', password: 'customer123' }])
 
 region = Region.create(title: 'region1', country: 'USA', currency: 'USD', tax: '0.1')
 

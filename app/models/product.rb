@@ -7,7 +7,7 @@ class Product < ApplicationRecord
   has_one_attached :image
 
   validates :sku, uniqueness: true
-  validates :image, presence: true
+  # validates :image, presence: true
 
   def get_image_url
     url_for(self.image)
