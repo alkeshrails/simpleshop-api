@@ -3,7 +3,7 @@ class Api::V1::OrdersController < ApplicationController
 
   # GET /orders
   def index
-    @orders = Order.all
+    @orders = @current_user.orders
 
     render json: @orders
   end

@@ -9,7 +9,7 @@ class Order < ApplicationRecord
   after_save :make_payment_task, if: :unpaid?
 
   def create_order_items(items = [])
-    products = JSON.parse(items.gsub!(/([[:alpha:]]+):/, '"\1":')).map { |item| [ item["id"], item["qty"] ] }
+    products = JSON.parse(items).map { |item| [ item["id"], item["qty"] ] }
     products.each do |p_id, p_qty|
       product = Product.find(p_id)
       OrderItem.create(quantity: p_qty, product_id: p_id, order_id: self.id)
