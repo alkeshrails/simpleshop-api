@@ -13,7 +13,17 @@ class Api::V1::ProductsController < ApplicationController
   end
 
   def create
-    @product = Product.new(product_params)
+    if product_params[:image].class == String
+      @product = Product.new(product_params.except(:image))
+      blob = ActiveStorage::Blob.create_after_upload!(
+              io: StringIO.new((Base64.decode64(product_params[:image].split(",")[1]))),
+              filename: "user.png",
+              content_type: "image/png",
+            )
+      @product.image.attach(blob)
+    else
+      @product = Product.new(product_params)
+    end
 
     if @product.save
       render json: @product, status: :created
@@ -24,6 +34,18 @@ class Api::V1::ProductsController < ApplicationController
   end
 
   def update
+    if product_params[:image].class == String
+      blob = ActiveStorage::Blob.create_after_upload!(
+              io: StringIO.new((Base64.decode64(product_params[:image].split(",")[1]))),
+              filename: "user.png",
+              content_type: "image/png",
+            )
+      @product.image.attach(blob)
+      @product.update(product_params.except(:image))
+    else
+      @product.update(product_params)
+    end
+
     if @product.update(product_params)
       render json: @product, status: :ok
     else
