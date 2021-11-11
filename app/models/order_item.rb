@@ -8,11 +8,11 @@ class OrderItem < ApplicationRecord
     quantity * product.price
   end
 
-  # def on_stock
-  #   product&.stock || 0
-  # end
+  def on_stock
+    product&.stock || 0
+  end
 
-  # def fulfillable?
-  #   on_stock >= quantity
-  # end
+  def fulfillable?
+    on_stock >= quantity
+  end
 end

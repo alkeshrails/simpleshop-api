@@ -34,19 +34,19 @@ class Api::V1::ProductsController < ApplicationController
   end
 
   def update
-    if product_params[:image].class == String
-      blob = ActiveStorage::Blob.create_after_upload!(
-              io: StringIO.new((Base64.decode64(product_params[:image].split(",")[1]))),
-              filename: "user.png",
-              content_type: "image/png",
-            )
-      @product.image.attach(blob)
-      @product.update(product_params.except(:image))
-    else
-      @product.update(product_params)
-    end
+    response = if product_params[:image].class == String
+                 blob = ActiveStorage::Blob.create_after_upload!(
+                         io: StringIO.new((Base64.decode64(product_params[:image].split(",")[1]))),
+                         filename: "user.png",
+                         content_type: "image/png",
+                       )
+                 @product.image.attach(blob)
+                 @product.update(product_params.except(:image))
+               else
+                 @product.update(product_params)
+               end
 
-    if @product.update(product_params)
+    if response 
       render json: @product, status: :ok
     else
       render json: { errors: @product.errors.full_messages },

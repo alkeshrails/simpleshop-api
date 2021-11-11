@@ -24,6 +24,16 @@ class Order < ApplicationRecord
     total
   end
 
+  def order_fullfillable?
+    fullfillable = true
+    order_items.each do |item|
+      next if item.fulfillable?
+
+      fullfillable = false
+    end
+    fullfillable
+  end
+
   def make_payment_task
     MakePaymentJob.set(wait: 1.minutes).perform_now(self)
   end
